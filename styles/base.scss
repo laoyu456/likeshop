@@ -159,7 +159,10 @@ page {
 .mb30 {
     margin-bottom: 30rpx;
 }
-
+/*mydev 隐藏*/
+.hide{
+	display:none;
+}
 /* 定义常用的弹性布局 */
 .wrap {
     flex-wrap: wrap;

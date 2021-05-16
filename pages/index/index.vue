@@ -47,11 +47,11 @@
 					<image class="icon-sm ml20" src="/static/images/arrow_right.png" />
 				</navigator>
 				<!-- 领卷 -->
-				<view class="mt20">
+				<view class="mt20 hide">
 					<home-coupon class="mt20" :list="coupon" @reflash="getHomeFun"></home-coupon>
 				</view>
 				<!-- 活动专区 -->
-				<view class="special-area row" v-if="activityArea.length">
+				<!--<view class="special-area row  " v-if="activityArea.length">
 					<navigator v-for="(item, index) in activityArea" :key="index" hover-class="none" class="area-item column-center" :url="'/pages/bundle/activity_detail/activity_detail?id=' + item.id + '&title=' + item.name + '&name=' + item.title">
 						<view class="mb10 flex1">
 							<view class="bold lg">{{item.name}}</view>
@@ -59,9 +59,9 @@
 						</view>
 						<custom-image width="130rpx" height="130rpx" :src="item.image"></custom-image>
 					</navigator>
-				</view>
+				</view>-->
 				<!-- 秒杀 -->
-				<view class="seckill mt20" v-if="seckillGoods.length">
+				<view class="seckill mt20 hide" v-if="seckillGoods.length">
 					<active-area extClass="seckill" progressBarColor="#FF2C3C" :lists="seckillGoods">
 						<navigator slot="header" hover-class="none" class="row activity-header white" open-type="navigate" url="/pages/bundle/goods_seckill/goods_seckill">
 							<view class="title xxl bold">超值秒杀</view>
@@ -78,7 +78,7 @@
 					</active-area>
 				</view>
 				<!-- 热销 -->
-				<view class="hot mt20" v-if="hotGoods.length">
+				<view class="hot mt20 hide" v-if="hotGoods.length">
 					<active-area extClass="hot" progressBarColor="#9912FE" :lists="hotGoods">
 						<navigator slot="header" hover-class="none" class="row activity-header white" open-type="navigate" url="/pages/bundle/hot_list/hot_list">
 							<view class="title xxl bold">热销榜单</view>
@@ -299,7 +299,8 @@
 				.nav {
 					position: relative;
 					.nav-item {
-						width: 20%;
+						/*width: 20%;*/
+						width: 25%;
 						margin-top: 30rpx;
 
 						.nav-icon {

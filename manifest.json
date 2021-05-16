@@ -1,5 +1,5 @@
 {
-    "name" : "LikeShop",
+    "name" : "石次方",
     "appid" : "__UNI__6E0F3B6",
     "description" : "",
     "versionName" : "1.0.0",
@@ -50,9 +50,10 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx75faf8824586138a",
+        "appid" : "wx118cd8c1a3d1f700",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "es6" : true
         },
         "usingComponents" : true,
         "optimization" : {
@@ -79,19 +80,20 @@
             "mode" : "history"
         },
         "publicPath" : "/mobile/"
-        // "devServer" : {
-        //     "https" : false,
-        //     "port" : 8080,
-        //     "proxy" : {
-        //         "/api" : {
-        //             "target" : "http://likeshop.yixiangonline.com",
-        //             "changeOrigin" : true,
-        //             "secure" : false,
-        //             "pathRewrite" : {
-        //                 "^/api" : "/api/"
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
+// "devServer" : {
+//     "https" : false,
+//     "port" : 8080,
+//     "proxy" : {
+//         "/api" : {
+//             "target" : "http://likeshop.yixiangonline.com",
+//             "changeOrigin" : true,
+//             "secure" : false,
+//             "pathRewrite" : {
+//                 "^/api" : "/api/"
+//             }
+//         }
+//     }
+// }
+
