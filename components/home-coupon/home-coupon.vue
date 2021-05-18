@@ -133,7 +133,7 @@
 </script>
 <style lang="scss">
 	.every-day-coupon {
-		background-image: url(../../static/images/home_bg_coupon.png);
+		 
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
 		height: 264rpx;
@@ -158,11 +158,11 @@
 				width: 326rpx;
 				flex: none;
 				position: relative;
-				background: url(../../static/images/home_bg_coupon_red.png);
+				 
 				background-size: 100% 100%;
 
 				&.recieve {
-					background-image: url(../../static/images/home_bg_coupon_gray.png);
+					 
 
 					.coupon-right {
 						background-color: #E5E5E5;

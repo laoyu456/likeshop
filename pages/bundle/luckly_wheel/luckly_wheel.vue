@@ -1,7 +1,7 @@
 <template>
 <view class="luckly-wheel-container">
   <view class="header">
-    <image src="/static/images/choujiang_bg.png"></image>
+    
   </view>
   <view class="main">
     <view class="row-end">

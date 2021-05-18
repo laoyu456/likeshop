@@ -18,7 +18,7 @@
 <template>
 	<view class="goods-combination">
 		<view class="header">
-			<image class="img" src="/static/images/group_bg.png"></image>
+			 
 		</view>
 		<view class="main bg-primary">
 			<view class="goods-list">

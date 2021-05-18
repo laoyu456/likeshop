@@ -196,7 +196,7 @@
 					name,
 					type
 				} = option;
-				this.type = type;
+				this.type =type;
 				getRect('.header-wrap').then(res => {
 					this.headerH = res.height
 				});
@@ -262,21 +262,24 @@
 					status
 				} = this;
 				if (status == loadingType.FINISHED) return;
+				var city=uni.getStorageSync("city");
 				const params = {
 					category_id: this.type == 1 ? this.id : '',
 					brand_id: this.type == 0 ? this.id : '',
 					page_no: page,
 					keyword,
 					price: priceSort,
-					sales_sum: saleSort
+					sales_sum: saleSort,
+					city:city
 				}
+				//console.log(params)
 				const data = await loadingFun(getGoodsSearch, page, goodsList, status, params)
 				if (!data) return
-				console.log(data)
+				
 				this.page = data.page
 				this.goodsList = data.dataList
 				this.status = data.status
-				console.log(this)
+				//console.log(this)
 			}
 
 		}

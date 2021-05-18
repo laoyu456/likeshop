@@ -161,10 +161,10 @@ export default {
     .coupon-item {
         position: relative;
         height: 200rpx;
-        background-image: url(../../static/images/coupon_bg.png);
+        
         background-size: 100% 100%;
         .gray {
-            background-image: url(../../static/images/coupon_bg_grey.png);
+             
             .btn{
                 .plain {
                     color: #CCCCCC;

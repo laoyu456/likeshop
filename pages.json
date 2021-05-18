@@ -161,7 +161,16 @@
 				"navigationBarTitleText": "物流详情"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/city/city",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "城市选择",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"subPackages": [{
 		"root": "pages/bundle",
 		"pages": [{

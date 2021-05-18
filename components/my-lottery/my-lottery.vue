@@ -203,7 +203,7 @@ export default {
 </script>
 <style>
 .my-lottery {
-  background-image: url(../../static/images/choujiang_light.png);
+  
   width: 560rpx;
   height: 560rpx;
   background-size: 100% 100%;
@@ -211,12 +211,12 @@ export default {
 }
 
 .my-lottery .lottery-item {
-  background-image: url(../../static/images/choujiang_block.png);
+  
   background-size: 100% 100%;
 }
 
 .my-lottery .lotty-btn {
-  background-image: url(../../static/images/choujiang_button.png);
+   
   background-size: 100% 100%;
 }
 

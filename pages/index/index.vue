@@ -5,13 +5,33 @@
 				<view class="navigation-bar bg-primary row" :style="{height: navHeight + 'px'}">
 					<image mode="heightFix" class="logo ml20" :src="logo"></image>
 				</view>
-				<navigator class="search" hover-class="none" url="/pages/goods_search/goods_search">
-					 <u-search bg-color="#fff" wrap-bg-color="#FF2C3C" :disabled="true"></u-search>
-				</navigator>
+				<!--<view class="city-box">4444</view>-->
+				<view class="big-box">
+					 <view class="city-box sec-box">
+						 <navigator hover-class="none" url="/pages/city/city">
+							<image style="width:30upx;height:30upx;vertical-align:middle;" src="../../static/images/d-w.png" />  <text style="padding-left:5upx;">{{city}}</text>  
+						 </navigator>
+					 </view>
+					 <view class="search-box sec-box">
+						 <navigator class="search" hover-class="none" url="/pages/goods_search/goods_search">
+						 	 <u-search bg-color="#fff" wrap-bg-color="#FF2C3C" :disabled="true"></u-search>
+						 </navigator>
+					 </view>
+				</view>
+				
 			</u-sticky>
 		</view>
 		<view class="contain">
-			<view class="top-bg"></view>
+			<!--<view class="top-bg">
+				
+				<image v-for="(list,index) in adList" :key="index" :src="list.image"></image>
+			</view>-->
+			<!-- banner -->
+			<swiper class="swiper banner" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration">
+				<swiper-item class="banner" v-for="(item,index) in adList" :key="index">
+					   <image :src="item.image" class="banner" mode="aspectFill"></image>
+				</swiper-item>
+			</swiper>
 			<view class="main">
 				 <bubble-tips top="50rpx" :discharge="isDischarge"></bubble-tips>
 				<swipers :pid="2" height="284rpx" padding="20rpx"></swipers>
@@ -157,6 +177,7 @@
 				navList: [],
 				news: [],
 				goodsList: [],
+				adList:[],
 				seckillGoods: [],
 				hotGoods: [],
 				newGoods: [],
@@ -164,16 +185,54 @@
 				showCoupop: false,
 				couponPopList: [],
 				coupon: [],
-				isDischarge: true
+				isDischarge: true,
+				indicatorDots: true,
+				autoplay: true,
+				interval: 2000,
+				duration: 500,
+				city:''
 			}
 		},
 		async onLoad(options) {
+			var city=uni.getStorageSync("city");
+			var that=this;
+			if(city){
+				this.city=city;
+			}else{
+				//定位获得实时位置
+				uni.getLocation({
+					type: 'wgs84',
+					success: function(res) {
+						uni.request({
+						   header:{
+						    "Content-Type": "application/text"
+						   },
+						   //注意:这里的key值需要高德地图的 web服务生成的key  只有web服务才有逆地理编码
+						   url:'https://restapi.amap.com/v3/geocode/regeo?output=JSON&location='+res.longitude+','+res.latitude+'&key=280802ed0116fef931dbcf5e7e9278d7&radius=1000&extensions=all',
+						   success(re) {
+						    //console.log(re)
+						    if(re.statusCode===200){
+						     that.city=re.data.regeocode.addressComponent.district;
+							 uni.setStorageSync("city",that.city);
+						    }else{
+						     console.log("获取信息失败，请重试！")
+						    }
+						    }
+						  });
+				
+					}
+				});
+			}
 			this.navHeight = app.globalData.navHeight
 			this.isDischarge = false;
 			await this.getMenuFun()
 			this.getBestListFun()
 		},
 		onShow() {
+			var city=uni.getStorageSync("city");
+			if(city){
+				this.city=city;
+			}
 			this.getHomeFun()
 			this.getCartNum()
 		},
@@ -204,14 +263,25 @@
 				} = await getHome();
 				uni.stopPullDownRefresh()
 				if (code == 1) {
+					//mydev
+					console.log(data);
 					const {
+						news,
+						shop_logo,
+						ad_list
+					} = data;
+					this.logo = shop_logo
+					this.news = news
+					this.adList=ad_list
+					/*const {
 						coupon,
 						news,
 						seckill,
 						host_goods,
 						shop_logo,
 						new_goods,
-						activity_area
+						activity_area,
+						ad_list
 					} = data;
 					this.remainTime = Math.abs(seckill.end_time - Date.parse(new Date()) / 1000);
 					this.logo = shop_logo
@@ -221,6 +291,7 @@
 					this.coupon = coupon
 					this.newGoods = new_goods
 					this.activityArea = activity_area
+					this.adList=ad_list*/
 					
 				}
 			},
@@ -269,6 +340,39 @@
 </script>
 
 <style lang="scss">
+	.banner {
+		width: 100%;
+		height: 400rpx;
+		box-shadow: 0px 0px 12px 0px rgba(0, 48, 107, 0.3);
+	}
+	.big-box{
+		width:100%;
+		height:100rpx;
+		background:#FF2C3C;
+	}
+	.sec-box{
+		display:inline-block;
+	}
+	.city-box{
+		width:15%;
+		color:#fff;
+		height:55rpx;
+		line-height:55rpx;
+		text-align:center;
+		font-size:26rpx;
+	}
+	.search-box{
+		width:85%;
+	}
+	/*.search{
+		width:90%;
+		display:block;
+		float:right;
+	}
+	.city-box{
+		width:10%;
+		float:left;
+	}*/
 	.index {
 		.header {
 			.navigation-bar {
@@ -284,7 +388,7 @@
 
 		.contain {
 			.top-bg {
-				background: url(../../static/images/bg_hometop.png) no-repeat;
+				 
 				background-size: 100% 100%;
 				height: 260rpx;
 				box-sizing: border-box;
@@ -292,7 +396,7 @@
 			}
 
 			.main {
-				margin-top: -260rpx;
+				/*margin-top: -260rpx;*/
 				position: relative;
 				z-index: 9;
 

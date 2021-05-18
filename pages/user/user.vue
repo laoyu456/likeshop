@@ -30,7 +30,7 @@
                     </view>
                 </view>
 			</view>
-			<view class="member column-end" @tap="goPage('/pages/user_vip/user_vip')">
+			<view class="member column-end" style="display:none;" @tap="goPage('/pages/user_vip/user_vip')">
 				<view class="member-entery row-between">
 					<view class="row">
 						<image class="icon-md" src="/static/images/icon_member.png"></image>
@@ -50,14 +50,14 @@
 					<view class="xl primary">{{userInfo.user_money}}</view>
 					<view class="sm">余额</view>
 				</view>
-				<view class="column-center mb20 assets-item" @tap="goPage('/pages/bundle/user_sign/user_sign')">
+				<!--<view class="column-center mb20 assets-item" @tap="goPage('/pages/bundle/user_sign/user_sign')">
 					<view class="xl primary">{{userInfo.user_integral}}</view>
 					<view class="sm">积分</view>
 				</view>
 				<view class="column-center mb20 assets-item" @tap="goPage('/pages/user_coupon/user_coupon')">
 					<view class="xl primary">{{userInfo.coupon}}</view>
 					<view class="sm">优惠券</view>
-				</view>
+				</view>-->
 			</view>
 		</view>
 		<view class="order-nav bg-white">

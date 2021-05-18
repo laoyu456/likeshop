@@ -89,7 +89,7 @@
 		margin: 0 20rpx;
 
 		&.seckill {
-			background-image: url(../../static/images/home_seckill_bg.png);
+			 
 		}
 
 		&.hot {

@@ -90,7 +90,7 @@
 				</view>
 			</view>
 
-			<view class="coupons row mt20 bg-white" style="align-items: flex-start;" @tap="showCouponFun" v-if="couponList.length">
+			<view class="coupons row mt20 bg-white" style="align-items: flex-start;display:none;" @tap="showCouponFun" v-if="couponList.length">
 				<view class="text muted">优惠</view>
 				<view style="flex: 1">
 					<view class="row">
@@ -545,7 +545,7 @@
 			.price {
 				width: 504rpx;
 				height: 100%;
-				background: url(../../static/images/bg_seckill.png) no-repeat;
+				 
 				background-size: 100%;
 			}
 

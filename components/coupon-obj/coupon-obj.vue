@@ -98,7 +98,7 @@
 	.coupon-obj .coupon-item {
 		position: relative;
 		height: 160rpx;
-		background-image: url(../../static/images/coupon_bg.png);
+		 
 		background-size: 100% 100%;
 	}
 
