@@ -34,7 +34,7 @@
 					</view>
 				</view>
 				<view class="contain benefit" v-if="orderInfo.order_type == 0">
-					<view class="item row-between" @tap="showCoupon = true">
+					<view class="item row-between" style="display:none" @tap="showCoupon = true">
 						<view>优惠券</view>
 						<view class="row">
 							<text class="primary" v-if="orderInfo.discount_amount">-￥{{orderInfo.discount_amount }}</text>
@@ -43,7 +43,7 @@
 							<image class="icon-sm ml20" src="/static/images/arrow_right.png"></image>
 						</view>
 					</view>
-					<view class="item row" @tap="changeIntegral" v-if="orderInfo.integral_switch">
+					<view class="item row" style="display:none" @tap="changeIntegral" v-if="orderInfo.integral_switch">
 						<view>积分抵扣</view>
 						<view class="ml20 muted xs row" style="flex:1">
 							共{{orderInfo.user_integral}}积分{{orderInfo.user_integral < orderInfo.integral_limit ? "，满" + orderInfo.integral_limit + "可用" : "" }}
