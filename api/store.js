@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import{client} from '@/utils/tools'
+import {client} from '@/utils/tools'
 //获取首页数据接口
 export function getHome() {
 	return request.get('index/lists')
@@ -124,7 +124,8 @@ export function getCartNum(params) {
 //获取商品热搜榜单
 export function getHotGoods(data) {
   return request.get("goods/getHostList", {params: data});
-} 
+}
+
 // 获取秒杀时间段
 export function getSeckillTime() {
 	return request.get("/seckill/seckillTime");
@@ -150,9 +151,6 @@ export function getNoticeLists(params) {
 
 export function getPoster(data) {
 	return request.get("share/sharegoods", {
-		params: {
-			...data,
-			client: client
-		}
+		params: data
 	});
 }

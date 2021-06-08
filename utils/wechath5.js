@@ -42,13 +42,10 @@ class Wechath5 {
 
 	//获取微信登录url
 	getWxUrl() {
-		console.log(weixin)
-		weixin.ready(() => {
-			getCodeUrl().then(res => {
-				if (res.code == 1) {
-					location.href = res.data.url
-				}
-			})
+		getCodeUrl().then(res => {
+			if (res.code == 1) {
+				location.href = res.data.url
+			}
 		})
 	}
 
@@ -118,13 +115,13 @@ class Wechath5 {
 					signType: opt.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 					paySign: opt.paySign, // 支付签名
 					success: (res) => {
-						reslove()
+						reslove('success')
 					},
 					cancel: (res) => {
-						reject()
+						reslove('fail')
 					},
 					fail: (res) => {
-						reject()
+						reslove('fail')
 					},
 				});
 			});

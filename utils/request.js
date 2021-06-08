@@ -2,20 +2,24 @@ import axios from '../js_sdk/xtshadow-axios/axios.min'
 import store from '../store'
 import {
 	paramsToStr,
-	currentPage
+	currentPage,
+	tabbarList,
+	acountList
 } from './tools'
 import Cache from './cache'
 import {
-	TOKEN
+	TOKEN,
+	BACK_URL
 } from '../config/cachekey'
-import {baseURL} from '../config/app'
 import {
-	wxAutoLogin,
-	isAuthorize,
+	baseURL
+} from '../config/app'
+import {
+	getWxCode,
+	toLogin,
+	wxMnpLogin
 } from './login'
-import {
-	showLoginDialog
-} from './wxutil'
+
 let index = 0;
 
 function checkParams(params) {
@@ -68,6 +72,10 @@ service.interceptors.response.use(
 					show,
 					msg
 				} = response.data;
+				const {
+					route,
+					options
+				} = currentPage()
 				if (code == 0 && show && msg) {
 					uni.showToast({
 						title: msg,
@@ -75,36 +83,19 @@ service.interceptors.response.use(
 					})
 				} else if (code == -1) {
 					store.commit('LOGOUT')
-					let num = store.getters.loginNum
-					//#ifdef  MP-WEIXIN
-					let isAuth = await isAuthorize();
-					if (!isAuth) return Promise.resolve(response.data)
-					if (num == 0) {
-						store.commit('SETLOGINNUM', ++num)
-						const {
-							code: loginCode,
-							data: loginData
-						} = await wxAutoLogin()
-						if (loginCode == 1) {
-							store.commit('SETLOGINNUM', 0)
-							uni.hideLoading()
-							store.commit('LOGIN', loginData)
-							const {
-								options,
-								onLoad,
-								onShow
-							} = currentPage()
-							onLoad && onLoad(options)
-							onShow && onShow()
-						}
+					//#ifdef MP-WEIXIN
+					wxMnpLogin()
+					// #endif
+					//#ifdef H5 || APP-PLUS
+					if (route && !tabbarList.includes(route)) {
+						toLogin()
 					}
 					// #endif
-					//#ifdef H5
-					if (num == 0) {
-						showLoginDialog()
+					//#ifdef H5 
+					if (!acountList.includes(route)) {
+						Cache.set(BACK_URL, `/${route}${paramsToStr(options)}`)
 					}
 					// #endif
-
 				}
 			}
 

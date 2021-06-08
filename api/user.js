@@ -53,7 +53,7 @@ export function getOneAddress(id) {
 
 // 获取默认地址
 export function getDefaultAddress(id) {
-    return request.get('user_address/getDefault',{params: {id}})
+    return request.get('user_address/getDefault', {params: {id}})
 }
 
 // 设置默认地址
@@ -163,10 +163,15 @@ export function recharge(data) {
     return request.post("recharge/recharge", data)
 }
 
+export function getRechargeRecord(params) {
+	return request.get("recharge/rechargeRecord", {params})
+}
+
 // 填写邀请码
 export function inputInviteCode(data) {
     return request.post("distribution/code", data)
 }
+
 
 // 分销会员申请
 export function applyVip(data) {
@@ -221,10 +226,10 @@ export function setUserInfo(data) {
 // 更换手机号
 export function changeUserMobile(data) {
     // #ifdef MP-WEIXIN
-    return request.post('user/getMobile', {...data, client: client});
+    return request.post('user/getMobile',data);
     // #endif
-    // #ifdef H5
-    return request.post("user/changeMobile", {...data, client: client})
+    // #ifdef H5 || APP-PLUS
+    return request.post("user/changeMobile", {...data, client})
     // #endif
 }
 
@@ -269,7 +274,7 @@ export function getMonthOrderDetail(params) {
 
 // 邀请海报
 export function getInviteBanner(data) {
-    return request.get("share/userPoster", {params: {...data, client: client}})
+    return request.get("share/userPoster", {params: data})
 }
 
 // 用户钱包
@@ -299,15 +304,72 @@ export function userLogout(data) {
 
 // 获取抽奖配置
 export function getPrize(data) {
-    return request.get("Luckdraw/prize", data)
+    return request.get("Luckdraw/prize", {
+        params: data
+    })
 }
 
 // 抽奖记录
 export function getUserRecord(data) {
-    return request.get("Luckdraw/record", data)
+    return request.get("Luckdraw/record", {
+        params: data
+    })
 }
 
 // 抽奖
 export function userLottery(data) {
-    return request.get("Luckdraw/draw", data)
+    return request.get("Luckdraw/draw", {
+        params: data
+    })
+}
+
+//更新微信信息
+
+export function setWechatInfo(data) {
+    return request.post('user/setWechatInfo', data)
+}
+
+
+//设置交易密码
+export function setPassword(data) {
+    return request.post('user/setPayPassword', data)
+}
+//修改支付密码
+export function changePayPassword(data) {
+    return request.post('user/changePayPassword', data)
+}
+//判断是否设置交易密码
+export function hasPayPassword() {
+    return request.get("user/hasPayPassword")
+}
+
+//会员转账
+export function transfer(data) {
+    return request.post('user/transfer', data)
+}
+
+
+//最近转账会员
+export function getTransferRecent() {
+    return request.get("user/transferRecent")
+}
+
+//会员转账记录
+export function transferRecord(params) {
+    return request.get("user/transferRecord",{params})
+}
+
+//发送验证码
+export function send(data) {
+    return request.post('user/send', data)
+}
+
+// 找回密码
+export function retrievePayPassword(data) {
+    return request.post('user/retrievePayPassword', data)
+}
+
+//获取会员信息  
+export function transferToInfo(params) {
+    return request.get("user/transferToInfo", {params})
 }

@@ -143,6 +143,11 @@
 				<view class="line1 mr20" style="flex: 1;">{{ checkedGoods.spec_value_str || '默认' }}</view>
 				<image class="icon-sm" src="/static/images/arrow_right.png"></image>
 			</view>
+			<view   class="spec row bg-white mt20" @tap="showPramFun()">
+				<view class="text lighter">参数</view>
+				<view class="line1 mr20" style="flex: 1;">品牌 型号...</view>
+				<image class="icon-sm" src="/static/images/arrow_right.png"></image>
+			</view>
 			<view class="evaluation bg-white mt20">
 				<navigator hover-class="none" :url="'/pages/all_comments/all_comments?id=' + goodsDetail.id" class="title row-between">
 					<view>
@@ -221,6 +226,28 @@
 				</view>
 			</view>
 		</u-popup>
+		<!--mydev start-->
+		   <u-popup v-model="showPram" mode="bottom" border-radius="14">
+		   	<view>
+		   		<view class="row-between" style="padding: 30rpx;">
+		   			<view class="title md bold" style="text-align:center;">产品参数</view>
+		   			<view class="close" @tap="showPram = false">
+		   				<image class="icon-lg" src="/static/images/icon_close.png"></image>
+		   			</view>
+		   		</view>
+		   		<view class="content bg-body">
+		   			<scroll-view scroll-y="true" style="height: 700rpx">
+		   				     <view class="pram-box">
+								    <view class="pram-row" v-for="(row,index) in goodsDetail.goods_arg_info">
+									   <view class="pram-title">{{row.title}}</view>
+									   <view class="pram-val">{{goodsDetail.goods_arg[row.name]}}</view>
+								   </view>
+							 </view>
+		   			</scroll-view>
+		   		</view>
+		   	</view>
+		   </u-popup>
+		<!--mydev end-->
 		<share-popup :show="showShareBtn" @close="showShareBtn = false" :goods-id="id"></share-popup>
 
 	</view>
@@ -268,6 +295,7 @@
 				showSpec: false,
 				showCoupon: false,
 				showShareBtn: false,
+				showPram:false,
 				popupType: '',
 				swiperList: [],
 				goodsDetail: {},
@@ -410,6 +438,9 @@
 				console.log(e);
 				this.checkedGoods = e.detail;
 			},
+			showPramFun(){
+				  this.showPram=true;
+             },
 			showSpecFun(type, id) {
 				if (!this.isLogin) return showLoginDialog();
 				if (this.goodsType == 2 && [2, 3].includes(type)) {
@@ -440,7 +471,10 @@
 				};
 				goodsType == 2 ? (params.teamId = team.team_id) : '';
 				this.foundId ? (params.foundId = this.foundId) : '';
-				goToPay('/pages/confirm_order/confirm_order?data=' + encodeURIComponent((JSON.stringify(params))))
+				uni.navigateTo({
+					url: '/pages/confirm_order/confirm_order?data=' + encodeURIComponent((JSON.stringify(params)))
+				})
+				//goToPay('/pages/confirm_order/confirm_order?data=' + encodeURIComponent((JSON.stringify(params))))
 			},
 			onConfirm(e) {
 				const {
@@ -776,5 +810,23 @@
 				}
 			}
 		}
+	}
+	.bg-body{
+		background:#fff;
+	}
+	.pram-box{
+		padding:10upx 20upx;
+	}
+	.pram-row{
+		padding:30upx 15upx;
+		border-bottom:1px solid #E5E5E5;
+		size:40upx;
+		display:flex;
+	}
+	.pram-title{
+		flex:3;
+	}
+	.pram-val{
+		flex:9;
 	}
 </style>

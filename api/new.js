@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import{client} from '@/utils/tools'
+import {client} from '@/utils/tools'
 //文章分类
 export function getCategoryList(data) {
     let {type} = data

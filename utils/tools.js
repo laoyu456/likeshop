@@ -6,6 +6,34 @@ import {
 } from '@/config/app.js'
 
 import store from '@/store'
+
+
+//所在环境
+let client = null
+// #ifdef MP-WEIXIN
+client = 1
+// #endif
+
+// #ifdef H5
+client = isWeixinClient() ? 2 : 6
+// #endif
+
+// #ifdef APP-PLUS
+client = 3;
+uni.getSystemInfo({
+	success: res => {
+		client = res.platform == 'ios' ? 3 : 4;
+	},
+	fail: res => {
+		client = 3
+	}
+})
+// #endif
+export {
+	client
+}
+
+
 //节流
 export const trottle = (func, time = 1000, context) => {
 	let previous = new Date(0).getTime()
@@ -272,13 +300,9 @@ export function currentPage() {
 	let currentPage = pages[pages.length - 1];
 	return currentPage || {};
 }
-// #ifdef MP-WEIXIN
-export const client = 1
-// #endif
 
-// #ifdef H5
-export const client = 2
-// #endif
+
+
 // H5复制方法
 export function copy(str) {
 	// #ifdef H5
@@ -300,26 +324,72 @@ export function copy(str) {
 	// #endif
 }
 
-//跳转到带有微信支付页面
-
-// 解决iosH5支付路径问题
-export function goToPay(url, push = true) {
-	// #ifndef H5
-	push ? uni.navigateTo({
-		url
-	}) : uni.redirectTo({
-		url
+export function  setTabbar() {
+	const config = store.getters.appConfig
+	uni.setTabBarStyle({
+		color: config.navigation_setting.ust_color,
+		selectedColor: config.navigation_setting.st_color,
+	})
+	// #ifdef APP-PLUS
+	config.navigation_menu.forEach((item, index) => {
+		uni.downloadFile({
+		  url: item.un_selected_icon,
+		  success: res => {
+			uni.setTabBarItem({
+				index,
+				iconPath: res.tempFilePath,
+			})
+		  }
+		});
+		uni.downloadFile({
+		  url: item.un_selected_icon,
+		  success: res => {
+			uni.setTabBarItem({
+				index,
+				iconPath: res.tempFilePath,
+			})
+		  }
+		});
+		uni.downloadFile({
+		  url: item.selected_icon,
+		  success: res => {
+			uni.setTabBarItem({
+				index,
+				selectedIconPath: res.tempFilePath,
+			})
+		  }
+		});
 	})
 	// #endif
-	// #ifdef H5
-	if (isAndroid()) {
-		push ? uni.navigateTo({
-			url
-		}) : uni.redirectTo({
-			url
+	// #ifndef APP-PLUS
+	config.navigation_menu.forEach((item, index) => {
+		uni.setTabBarItem({
+			index,
+			text: item.name,
+			iconPath: item.un_selected_icon,
+			selectedIconPath: item.selected_icon,
+			fail(res) {
+				console.log(res)
+			},
+			success(res) {
+				console.log(res)
+			}
 		})
-	} else {
-		push ? location.href = '/mobile' + url : location.replace('/mobile' + url)
-	}
+	})
 	// #endif
+	uni.showTabBar()
 }
+
+// tabbar页面路径
+export const tabbarList = [
+	'pages/shop_cart/shop_cart',
+	'pages/user/user',
+	'pages/index/index',
+	'pages/sort/sort',
+]
+// 登录注册相关
+export const acountList = [
+	'pages/login/login',
+	'pages/forget_pwd/forget_pwd',
+	'pages/register/register'
+]

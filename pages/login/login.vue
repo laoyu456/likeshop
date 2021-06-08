@@ -9,8 +9,8 @@
 			<view class="user-name mt20">
 				<open-data type="userNickName"></open-data>
 			</view>
-			<view class="title xxl mb20 bold">微信授权登录</view>
-			<button size="lg" class="white br60 row-center btn" open-type="getUserInfo" @getuserinfo="getUserInfo">
+			<view class="title xxl mt20 bold">微信授权登录</view>
+			<button size="lg" class="white br60 row-center btn" @click="mnpLoginFun">
 				<image class="mr10 image" src="/static/images/icon_wechat.png"></image>
 				<text>微信一键授权</text>
 			</button>
@@ -19,7 +19,7 @@
 		<!--  #endif -->
 		<!-- #ifdef H5 || APP-PLUS -->
 		<view class="h5-login" v-if="!isWeixin">
-			<image class="logo" src="/static/images/shop_logo.png"></image>
+			<image class="logo" :src="appConfig.shop_login_logo"></image>
 			<view v-if="loginType == 0">
 				<view class="input">
 					<u-input v-model="account" style="width: 100%;" placeholder="请输入账户" :input-border="false" />
@@ -50,9 +50,20 @@
 				<view class="lighter" @click="changeLoginType">{{loginType == 0 ? "短信验证码登录" : "账号登录"}}</view>
 				<navigator class="lighter" url="/pages/register/register" hover-class="none">注册账号</navigator>
 			</view>
-			<view class="flex1"></view>
+			<view class="flex1 wx-login">
+				<!-- #ifdef APP-PLUS -->
+				<view v-if="appConfig.app_wechat_login">
+					<u-divider>其他登录方式</u-divider>
+					<view @click="appWxLogin">
+						<image class="image" src="/static/images/icon_wechat.png"></image>
+						<view class="sm">微信登录</view>
+						<text selectable>{{text}}</text>
+					</view>
+				</view>
+				<!-- #endif -->
+			</view>
 			<view class="mb20 sm row">
-				已阅读并同意LikeShop
+				已阅读并同意
 				<navigator class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=0">《服务协议》</navigator>
 				和
 				<navigator class="primary" hover-class="none" url="/pages/bundle/server_explan/server_explan?type=1">《隐私协议》</navigator>
@@ -64,28 +75,29 @@
 
 <script>
 	import {
-		wxLogin
-	} from '@/utils/login';
-	import {
 		mapMutations,
-		mapActions
+		mapActions,
+		mapGetters
 	} from 'vuex'
 	import {
 		accountLogin,
 		codeLogin,
 		sendSms,
 		wxpLogin,
-		smsCodeLogin
+		smsCodeLogin,
+		opLogin,
+		authLogin
 	} from '@/api/app';
 	import {
 		inputInviteCode
 	} from '@/api/user'
 	import wechath5 from '@/utils/wechath5'
 	import {
-		isWeixinClient
+		isWeixinClient,
+		currentPage,
+		client
 	} from '@/utils/tools'
 	import {
-		client
 	} from '@/utils/tools'
 	import {
 		SMSType
@@ -94,6 +106,7 @@
 	import {
 		BACK_URL
 	} from '@/config/cachekey'
+	import {getWxCode, getUserProfile} from '@/utils/login'
 	const loginType = {
 		ACCOUNT_LOGIN: 0,
 		SMS_CODE_LOGIN: 1,
@@ -109,12 +122,15 @@
 				smsCode: '',
 				time: 59,
 				canSendSms: true,
-				telephone: ""
+				telephone: "",
+				text: ''
 			};
 		},
 
 		async onLoad(option) {
+			
 			// #ifdef H5
+			// H5微信登录
 			this.isWeixin = isWeixinClient()
 			if (this.isLogin) {
 				uni.switchTab({
@@ -133,40 +149,39 @@
 					wechath5.getWxUrl()
 				}
 			}
-			// #endif 
+			// #endif
+		},
+		onUnload() {
+			
 		},
 		methods: {
 			...mapMutations(['LOGIN']),
 			...mapActions(['getUser']),
-			async getUserInfo(e) {
-				if (!e.detail.userInfo) return;
+			countDownFinish() {
+				this.canSendSms = true;
+			},
+			// 小程序登录
+			async mnpLoginFun() {
+				const {userInfo: {avatarUrl, nickName, gender}} = await getUserProfile()
 				uni.showLoading({
 					title: '登录中...',
 					mask: true
 				});
-				let {
-					encryptedData: encrypted_data,
-					iv
-				} = e.detail;
-				const {
-					code,
-					data
-				} = await wxLogin({
-					encrypted_data,
-					iv
+				const wxCode = await getWxCode()
+				const {code, data, msg} = await authLogin({
+					code: wxCode,
+					nickname: nickName,
+					headimgurl: avatarUrl,
 				})
-				uni.hideLoading()
-				if (code == 1) {
+				if(code == 1) {
 					this.loginHandle(data)
-				} else {
+				}else {
 					this.$toast({
-						title: '登录失败，请稍后再试'
-					});
+						title: msg
+					})
 				}
 			},
-			countDownFinish() {
-				this.canSendSms = true;
-			},
+			// 账号登录
 			async loginFun() {
 				const {
 					account,
@@ -209,9 +224,10 @@
 					})
 				}
 			},
-			loginHandle(data) {
+			// 登录结果处理
+			async loginHandle(data) {
 				this.LOGIN(data)
-				this.getUser()
+				uni.hideLoading()
 				const inviteCode = Cache.get("INVITE_CODE")
 				if (inviteCode) {
 					inputInviteCode({
@@ -220,11 +236,18 @@
 				}
 				// #ifdef H5
 				location.replace('/mobile' + (Cache.get(BACK_URL) || '/'))
+				Cache.remove(BACK_URL)
 				//#endif
-				// #ifdef MP-WEIXIN
-				uni.navigateBack();
+				// #ifdef MP-WEIXIN  || APP-PLUS
+				uni.navigateBack({
+					success(){
+						// 刷新上一页
+						const {onLoad, options} = currentPage()
+						onLoad && onLoad(options)
+					}
+				})
 				//#endif
-
+				
 			},
 			changeLoginType() {
 				if (this.loginType == loginType.ACCOUNT_LOGIN) {
@@ -233,6 +256,7 @@
 					this.loginType = loginType.ACCOUNT_LOGIN
 				}
 			},
+			// 发送验证码
 			$sendSms() {
 				if (this.canSendSms == false) {
 					return;
@@ -257,6 +281,33 @@
 					}
 				})
 			},
+			// app微信登录
+			async appWxLogin() {
+				uni.login({
+					provider:'weixin',
+					success: (res) => {
+						uni.showLoading({
+							title: '登录中...',
+							mask: true
+						});
+						const {openid,access_token,} = res.authResult
+						opLogin({
+							openid,
+							access_token
+						}).then(res => {
+							uni.hideLoading()
+							if(res.code == 1) {
+								this.loginHandle(res.data)
+							}
+						})
+					}
+				})
+				
+				
+			}
+		},
+		computed: {
+			...mapGetters(['appConfig'])
 		}
 	};
 </script>
@@ -278,15 +329,10 @@
 					border-radius: 50%;
 					border: 1px solid #eee;
 					overflow: hidden;
-
-
-					.user-name {
-						margin-bottom: 40rpx;
-						height: 40rpx;
-					}
-
 				}
-
+				.user-name {
+					height: 40rpx;
+				}
 				.image {
 					width: 50rpx;
 					height: 50rpx;
@@ -301,7 +347,7 @@
 
 
 			.h5-login {
-				padding-top: 160rpx;
+				padding-top: 100rpx;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
@@ -311,7 +357,7 @@
 				.logo {
 					width: 280rpx;
 					height: 80rpx;
-					margin-bottom: 70rpx;
+					margin-bottom: 50rpx;
 				}
 
 				.input {
@@ -321,10 +367,20 @@
 				}
 
 				.sms-btn {
-					border: 1rpx solid $-color-primary;
+					border: 1px solid $-color-primary;
 					width: 176rpx;
 					height: 60rpx;
 					box-sizing: border-box;
+				}
+
+				.wx-login {
+					margin-top: 60rpx;
+
+					.image {
+						margin-top: 40rpx;
+						width: 80rpx;
+						height: 80rpx;
+					}
 				}
 			}
 		}

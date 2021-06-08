@@ -16,6 +16,7 @@ export const CollectType = {
 //支付方式
 export const payWay = {
 	WECHAT: 1,
+	ALIPAY: 2,
 	BALANCE:3
 }
 
@@ -51,11 +52,16 @@ export const refundOptType = {
 
 // 短信发送
 export const SMSType = {
+    // 注册
     REGISTER: 'ZCYZ',
+    // 找回密码
     FINDPWD: 'ZHMM',
+    // 登陆
     LOGIN: 'YZMDL',
+    // 更换手机号
     CHANGE_MOBILE: 'BGSJHM',
-    BIND_MOBILE: 'BDSJHM'
+    // 绑定手机号
+    BIND: 'BDSJHM'
 }
 
 // 分销订单状态
@@ -89,8 +95,20 @@ export const groupType = {
 };
 
 export const bargainType = {
-    ALL: 'all',
-    BARGINNING: "bargainning",
-    SUCCESS: 'success',
-    FAIL: 'fail'
+    ALL: -1,
+    BARGINNING: 0,
+    SUCCESS: 1,
+    FAIL: 2
+}
+
+export const withdrawType = {
+    // 账户余额
+    ACCOUNT: 1,
+    // 微信零钱
+    WECHAT: 2,
+    // 微信收款码
+    PAY_WECHAT: 3,
+    // 支付宝收款码
+    PAY_ALIPAY: 4,
+	BANK: 5
 }
