@@ -2,7 +2,7 @@
 	<div class="wrapper" :style="'top:'+statusBarHeight+'px'">
 		<div class="header">
 			<view class="back_div">
-				<image class="back_img" @click="back_city()" src="../../static/back_img.png" mode=""></image>
+				<!--<image class="back_img" @click="back_city()" src="../../static/back_img.png" mode=""></image>-->
 			</view>
 			<input class="input" @input="onInput" placeholder="中文/拼音/首字母" v-model="searchValue" />
 		</div>
@@ -18,7 +18,7 @@
 							{{position}}
 						</view>
 						<view class="dingweis_div" @click="getWarpweft">
-							<image class="dingweis" src="../../static/dingweis.png" mode=""></image>
+							<!--<image class="dingweis" src="../../static/dingweis.png" mode=""></image>-->
 							<text>{{po_tips}}</text>
 						</view>
 					</view>

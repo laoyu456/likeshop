@@ -137,6 +137,57 @@
 				</view>
 			</view>
 		</view>
+		<uni-fab ref="fab" :pattern="pattern" :content="content" :horizontal="horizontal" :vertical="vertical" :direction="direction"
+		 @trigger="trigger" @fabClick="fabClick" />
+		 <!--mydev start-->
+		    <u-popup v-model="showPram" mode="bottom" border-radius="14">
+		    	<view>
+		    		<view class="row-between" style="padding: 30rpx;">
+		    			<view class="title md bold" style="text-align:center;">微信号</view>
+		    			<view class="close" @tap="showPram = false">
+		    				<image class="icon-lg" src="/static/images/icon_close.png"></image>
+		    			</view>
+		    		</view>
+		    		<view class="content bg-body">
+		    			 <image :src="config_info.image" mode="aspectFit" show-menu-by-longpress="true" />
+						 <view class="wechat-box">微信号：{{config_info.wechat}}</view>
+		    		</view>
+		    	</view>
+		    </u-popup>
+		 <!--mydev end-->
+		 <!--mydev start-->
+		    <u-popup v-model="showKf" mode="bottom" border-radius="18">
+		    	<view>
+		    		<view class="row-between" style="padding: 30rpx;">
+		    			<view class="title md bold" style="text-align:center;">客服电话</view>
+		    			<view class="close" @tap="showKf = false">
+		    				<image class="icon-lg" src="/static/images/icon_close.png"></image>
+		    			</view>
+		    		</view>
+		    		<view class="content bg-body bg-phone-body">
+		    			 <view class="row-white" v-for="(phone,index) in config_info.phone">
+		    			      <view class="xs" style="line-height: 49px;">{{phone}}</view>
+		    			      <!-- #ifdef H5 -->
+		    			      <a class="ml10 phone-btn xs row-center white" :href="'tel:' + phone">拨打</a>
+		    			      <!-- #endif -->
+		    			      <!-- #ifdef MP-WEIXIN -->
+		    			      <a class="ml10 phone-btn xs row-center " @click="showTelTips(phone)">拨打</a>
+		    			      <!-- #endif -->
+		    			      <view class="ml5 copy-phone-btn xs row-center" @click="onCopy(phone)">复制</view>
+		    			  </view>
+		    		</view>
+		    	</view>
+		    </u-popup>
+			<u-modal
+			:content="phone_content"
+			v-model="showPhoneCall"
+			show-cancel-button
+			confirm-text='呼叫'
+			:confirm-color="primaryColor"
+			@confirm="onCall"
+			>
+			</u-modal>
+		 <!--mydev end-->
 	</view>
 </template>
 
@@ -156,14 +207,24 @@
 	import {
 		loadingFun,
 		menuJump,
-		arraySlice
+		arraySlice,
+		copy
 	} from '@/utils/tools'
 	import {
 		showLoginDialog
 	} from '@/utils/wxutil'
+	import {
+		uniFab
+	} from '@/components/uni-fab/uni-fab.vue'
+	import {
+		getConfig
+	} from '@/api/app'
 	import Cache from '@/utils/cache'
 	const app = getApp()
 	export default {
+		components:{
+			uniFab
+		},
 		data() {
 			return {
 				navSwiperH: 374,
@@ -190,7 +251,42 @@
 				autoplay: true,
 				interval: 2000,
 				duration: 500,
-				city:''
+				city:'',
+				directionStr: '垂直',
+				horizontal: 'right',
+				vertical: 'bottom',
+				direction: 'vertical',
+				pattern: {
+					color: '#7A7E83',
+					backgroundColor: '#fff',
+					selectedColor: '#007AFF',
+				},
+				content: [{
+						iconPath: 'dianhua',
+						 
+						text: '电话',
+						active: false
+					},
+					
+					{
+						iconPath: 'kefu1',
+						
+						text: '客服',
+						active: false
+					},
+					{
+						iconPath: 'weixin',
+						 
+						text: '微信',
+						active: false
+					}
+				],
+				showPram:false,
+				showKf:false,
+				config_info:{},
+				showPhoneCall: false,
+				phone:"",
+				phone_content: '即将打电话给'
 			}
 		},
 		async onLoad(options) {
@@ -235,6 +331,12 @@
 			}
 			this.getHomeFun()
 			this.getCartNum()
+			getConfig().then(res=>{
+				//console.log(res,"-----res----res---");
+				if(res.code == 1) {
+				    this.config_info = res.data
+				}
+			})
 		},
 		onReachBottom() {
 			this.getBestListFun()
@@ -331,6 +433,54 @@
 			},
 			swiperChange(e) {
 				this.currentSwiper = e.detail.current
+			},
+			trigger(e) {
+				//console.log(e)
+				this.content[e.index].active = !e.item.active;
+				if(e.item.text=="微信"){
+					this.showPram=true;
+				}
+				if(e.item.text=="电话"){
+					this.showKf=true;
+				}
+				
+				/*uni.showModal({
+					title: '提示',
+					content: `您${this.content[e.index].active ? '选中了' : '取消了'}${e.item.text}`,
+					success: function(res) {
+						if (res.confirm) {
+							console.log('用户点击确定')
+						} else if (res.cancel) {
+							console.log('用户点击取消')
+						}
+					}
+				})*/
+			},
+			onCopy(str) {
+			    copy(str);
+			},
+			showTelTips(phone) {
+			    this.showPhoneCall = true;
+				this.phone=phone;
+			    this.phone_content = '即将打电话给' +phone
+				
+			},
+			onCall() {
+			    wx.makePhoneCall({
+			        phoneNumber: this.phone.toString(),
+			        success(e) {
+			            console.log('成功', e)
+			        },
+			        fail(err) {
+			            console.log('失败', err)
+			        }
+			    })
+			},
+			fabClick() {
+				/*uni.showToast({
+					title: '点击了悬浮按钮',
+					icon: 'none'
+				})*/
 			}
 		},
 		computed: {
@@ -363,6 +513,49 @@
 	}
 	.search-box{
 		width:85%;
+	}
+	/*mydevcss*/
+	.bg-body{
+		background:#fff;
+		text-align:center;
+	}
+	.wechat-box{
+		font-size:34upx;
+		color:#999;
+		padding:0 0 20upx 0;
+	}
+	.row-white{
+		text-align:center;
+		display:inline-block;
+		width:100%;
+		color:#444;
+		
+	}
+	.row-white .xs{
+		font-size:28upx!important;
+	}
+	 .row-white .xs,.row-white .phone-btn{
+		display:inline-block;
+		 
+	}
+	.phone-btn {
+	    background: linear-gradient(180deg, #FFA200 0%, #FF5E44 100%);
+	    border-radius: 50upx;
+		color:#ffffff;
+		padding:4upx 20upx;
+		 
+	}
+	.copy-phone-btn {
+		//4d9aef
+		background: linear-gradient(180deg, #007AFF 0%, #4d9aef 100%);
+	    border-radius: 50upx;
+		color:#ffffff;
+		margin-left:20upx;
+		padding:4upx 20upx;
+		 
+	}
+	.bg-phone-body{
+		padding:20upx;
 	}
 	/*.search{
 		width:90%;

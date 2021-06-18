@@ -5,6 +5,7 @@ export function getHome() {
 	return request.get('index/lists')
 }
 
+
 //获取菜单
 export function getMenu(data) {
 	return request.get('menu/lists', {
@@ -51,6 +52,12 @@ export function getGoodsSearch(data) {
 	return request.get('goods/getGoodsList', {
 		params: data
 	});
+}
+//mydev 获得城市搜索数据
+export function getSearchData(data){
+    return request.get('goods/getCityList', {
+    	params: data
+    });	
 }
 //搜索页,热门搜索列表,和历史搜索列表
 

@@ -379,7 +379,27 @@ export function  setTabbar() {
 	// #endif
 	uni.showTabBar()
 }
-
+// 解决iosH5支付路径问题
+export function goToPay(url, push = true) {
+	// #ifndef H5
+	push ? uni.navigateTo({
+		url
+	}) : uni.redirectTo({
+		url
+	})
+	// #endif
+	// #ifdef H5
+	if (isAndroid()) {
+		push ? uni.navigateTo({
+			url
+		}) : uni.redirectTo({
+			url
+		})
+	} else {
+		push ? location.href = '/mobile' + url : location.replace('/mobile' + url)
+	}
+	// #endif
+}
 // tabbar页面路径
 export const tabbarList = [
 	'pages/shop_cart/shop_cart',

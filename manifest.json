@@ -1,6 +1,6 @@
 {
     "name" : "石次方",
-    "appid" : "__UNI__6E0F3B6",
+    "appid" : "__UNI__4090CEB",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -43,7 +43,9 @@
             /* ios打包配置 */
             "ios" : {},
             /* SDK配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "ad" : {}
+            }
         }
     },
     /* 快应用特有相关 */
@@ -55,11 +57,11 @@
             "urlCheck" : false,
             "es6" : true
         },
-		"permission": {
-		  "scope.userLocation": {
-		   "desc": "你的位置信息将用于小程序位置接口的效果展示"
-		  }
-		 },
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "你的位置信息将用于小程序位置接口的效果展示"
+            }
+        },
         "usingComponents" : true,
         "optimization" : {
             "subPackages" : true

@@ -205,7 +205,7 @@ export default {
     width: 545rpx;
     height: 514rpx;
     background-size: 100% 100%;
-    background-image: url(../../../static/images/lottery_bg.png);
+    /*background-image: url(../../../static/images/lottery_bg.png);*/
   }
 }
 

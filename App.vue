@@ -14,6 +14,7 @@
 	import {
 		strToParams
 	} from '@/utils/tools'
+	import '@/iconfont.css'
 	export default {
 		globalData: {
 			navHeight: ""

@@ -316,7 +316,7 @@ export default {
     height: 626rpx;
     width: 560rpx;
     position: relative;
-    background-image: url(../../../static/images/jifen_popBg.png);
+   /* background-image: url(../../../static/images/jifen_popBg.png);*/
 }
 
 .u-mode-center-box {

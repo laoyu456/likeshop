@@ -16,7 +16,7 @@
 // +----------------------------------------------------------------------
 
 <template>
-	<view class="pay-result">
+	<view class="pay-result column-center">
 		<view class="contain bg-white">
 			<view class="header  column-center">
 				<view>
@@ -49,9 +49,9 @@
 			</view>
 			<view class="line ml20"></view>
 			<view class="opt-btn-contain row-center wrap">
-				<view hover-class="none" class="check-order-btn row-center bg-primary br60 mt20" @click="toOrder">
+				<navigator open-type="redirect" hover-class="none" class="check-order-btn row-center bg-primary br60 mt20" url="/pages/user_order/user_order">
 					<view class="white bg-primary lg">查看订单</view>
-				</view>
+				</navigator>
 				<navigator hover-class="none" class="go-back-btn row-center br60 mt20" open-type="switchTab" url="/pages/index/index">
 					<view class="primary br60 lg">返回首页</view>
 				</navigator>
@@ -64,9 +64,6 @@
 	import {
 		getOrderDetail
 	} from '@/api/order';
-	import {
-		goToPay
-	} from '@/utils/tools';
 	export default {
 		data() {
 			return {
@@ -92,9 +89,6 @@
 					}
 				});
 			},
-			toOrder() {
-				goToPay('/pages/user_order/user_order', false)
-			}
 
 		}
 	};

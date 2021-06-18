@@ -90,7 +90,7 @@
 </script>
 <style lang="scss">
 	.hot-list {
-		background: url(../../../static/images/hot_list_bg.png) no-repeat;
+		/*background: url(../../../static/images/hot_list_bg.png) no-repeat;*/
 		background-size: 100% 330rpx;
 		padding: 62rpx 30rpx 0;
 		min-height: 100vh;

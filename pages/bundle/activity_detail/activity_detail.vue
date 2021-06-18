@@ -108,7 +108,7 @@ export default {
 </script>
 <style>
 .activity-detail-contain .header {
-    background-image: url(../../../static/images/activity_detail_bg.png);
+   /* background-image: url(../../../static/images/activity_detail_bg.png);*/
     background-size: 100% 100%;
     height: 340rpx;
     width: 100%;

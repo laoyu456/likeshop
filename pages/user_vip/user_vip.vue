@@ -33,19 +33,21 @@
 										<view class="vip-progress-bar" :style="'width: ' + ((userInfo.user_growth/item.growth_value > 1 ? 1 : userInfo.user_growth/item.growth_value)*100) + '%'"></view>
 									</view>
 								</view>
-								<view class="row-between mt20" style="padding: 0 30rpx">
+								
+								 <view class="row-between mt20" style="padding: 0 30rpx">
 									<navigator hover-class="none" class="row">
 										<view class="sm white" style="line-height: 36rpx">
-											当前成长值 <text class="bold">{{userInfo.user_growth}}</text>
+											当前成长值 <text class="bold">{{userInfo.user_order_growth}}</text>
 										</view>
 									</navigator>
 									<view class="white">{{item.tips}}</view>
 								</view>
+								
 							</view>
 						</swiper-item>
 					</swiper>
 				</view>
-				<view class="vip-grade-rule">
+				<!--<view class="vip-grade-rule">
 					<view class="title row">
 						<view class="line br60"></view>
 						<view class="xl ml20 bold">成长值规则</view>
@@ -53,7 +55,7 @@
 					<text class="rule-content column lighter ml20">
 						{{growthRule}}
 					</text>
-				</view>
+				</view>-->
 				<view class="vip-rights">
 					<view class="title row">
 						<view class="line br60"></view>

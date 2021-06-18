@@ -93,7 +93,7 @@
 		}
 
 		&.hot {
-			background-image: url(../../static/images/home_hot_bg.png);
+			/*background-image: url(../../static/images/home_hot_bg.png);*/
 		}
 
 		.a-main {

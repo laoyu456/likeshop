@@ -8,7 +8,7 @@
 						 :src="item.url" :show-center-play-btn="false" :show-play-btn="showControls" @play="showPlay = false" @ended="showPlay = true" @fullscreenchange="fullscreenchange"></video>
 						 <image v-if="showPlay" @tap.stop="play" src="/static/images/icon_play.png" class="icon-play"></image>
 					</view>
-					<custom-image v-else width="750rpx" height="750rpx" :src="item.url"></custom-image>
+					<custom-image v-else width="750upx" height="750upx" mode="aspectFit" :src="item.url"></custom-image>
 				</swiper-item>
 			</block>
 		</swiper>

@@ -274,7 +274,8 @@
 </script>
 <style lang="scss">
 	.user {
-		background-image: url(../../static/images/my_topbg.png);
+		/*background-image: url(../../static/images/my_topbg.png);*/
+		
 		background-size: 100% 420rpx;
 		background-repeat: no-repeat;
 		
@@ -282,6 +283,7 @@
 			display: flex;
 			flex-direction: column;
 			height: 420rpx;
+			background:#FF2C3C;
 			.user-info {
 				padding: 10rpx 30rpx;
 				//#ifdef  H5 
@@ -341,7 +343,7 @@
 					padding: 0 16rpx;
 					width:100%;
 					height: 80rpx;
-					background: url(../../static/images/bg_member_grade.png);
+					/*background: url(../../static/images/bg_member_grade.png);*/
 					background-size: 100%;
 				}
 			}
